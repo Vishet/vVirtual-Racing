@@ -44,7 +44,7 @@ crashinfo.txt
 samp.ban
 
 # .vscode
-.vscode/
+/.vscode/*
 
 #
 # Common files
