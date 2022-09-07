@@ -1,14 +1,15 @@
 {
 	"user": "Vishet",
 	"repo": "vVirtual-Racing",
-	"entry": "modules/gamemode.pwn",
-	"output": "gamemode.amx",
+	"entry": "gamemodes/gamemode.pwn",
+	"output": "gamemodes/gamemode.amx",
 	"dependencies": [
 		"pawn-lang/samp-stdlib",
 		"pawn-lang/pawn-stdlib",
 		"pawn-lang/YSI-Includes",
 		"Southclaws/zcmd",
-		"Y-Less/sscanf:v2.13.1"
+		"Y-Less/sscanf:v2.13.1",
+		"Zeex/samp-plugin-crashdetect:v4.20"
 	],
 	"local": true,
 	"runtime": {
