@@ -1,0 +1,6 @@
+enum PLAYER_DATA
+{
+    PD_SESSION_ID
+}
+
+new players[MAX_PLAYERS][PLAYER_DATA];

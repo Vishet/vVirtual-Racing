@@ -1,2 +1,2 @@
-#define RED  0xFF0000FF
-#define BLUE 0x0000FFFF
+#define COLOR_RED  0xFF0000FF
+#define COLOR_BLUE 0x0000FFFF

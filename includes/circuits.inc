@@ -1,10 +1,7 @@
-#define MAX_CHECKPOINTS 30
-#define MAX_CIRCUIT_NAME_SIZE 128
-
-
 enum CIRCUIT_ID
 {
-    LV
+    CID_INVALID,
+    CID_LAS_VEGAS
 }
 
 enum
@@ -14,36 +11,49 @@ enum
     Z
 }
 
-#define CHECKPOINT_DIMENSIONS 3
-#define CHECKPOINTS_SIZE MAX_CHECKPOINTS * CHECKPOINT_DIMENSIONS
-#define CHECKPOINTS][%1][%2] CHECKPOINTS][((%1)*CHECKPOINT_DIMENSIONS)+(%2)]
+#define CD_CHECKPOINTS_SIZE MAX_CHECKPOINTS * 3
 enum CIRCUIT_DATA
 {
-    NAME[MAX_CIRCUIT_NAME_SIZE],
-    Float:CHECKPOINTS[CHECKPOINTS_SIZE],
-    CHECKPOINTNUMBER
+    CD_NAME[MAX_CIRCUIT_NAME_SIZE],
+    Float:CD_XCHECKPOINTS[MAX_CHECKPOINTS],
+    Float:CD_YCHECKPOINTS[MAX_CHECKPOINTS],
+    Float:CD_ZCHECKPOINTS[MAX_CHECKPOINTS],
+    CD_CHECKPOINTS_COUNT,
+    Float:CD_FIRST_ANGLE
 }
 
 new Circuits[CIRCUIT_ID][CIRCUIT_DATA];
 
-stock LoadCircuit(const file[])
+stock LoadCircuit(CIRCUIT_ID:circuitID, const file[])
 {
-    new checkpointFile[128];
+    new checkpointFile[STRING_SIZE];
     format(checkpointFile, sizeof(checkpointFile), "%s/checkpoints.ini", file);   
 
-    for(new i = 0; i < DOF2_GetInt(checkpointFile, "count"); i++)
+    new infoFile[STRING_SIZE];
+    format(infoFile, sizeof(infoFile), "%s/info.ini", file);
+
+    stringcpy(Circuits[circuitID][CD_NAME], MAX_CIRCUIT_NAME_SIZE, DOF2_GetString(infoFile, "name"));
+    Circuits[circuitID][CD_CHECKPOINTS_COUNT] = DOF2_GetInt(checkpointFile, "count");
+    Circuits[circuitID][CD_FIRST_ANGLE] = Float:DOF2_GetFloat(infoFile, "first_angle");
+
+    for(new i = 0; i < Circuits[circuitID][CD_CHECKPOINTS_COUNT]; i++)
     {
         new key[16];
 
         format(key, sizeof(key), "x[%i]", i);
-        Circuits[LV][CHECKPOINTS][i][X] = DOF2_GetFloat(checkpointFile, key);
+        Circuits[circuitID][CD_XCHECKPOINTS][i] = DOF2_GetFloat(checkpointFile, key);
 
         format(key, sizeof(key), "y[%i]", i);
-        Circuits[LV][CHECKPOINTS][i][Y] = DOF2_GetFloat(checkpointFile, key);
+        Circuits[circuitID][CD_YCHECKPOINTS][i] = DOF2_GetFloat(checkpointFile, key);
 
         format(key, sizeof(key), "z[%i]", i);
-        Circuits[LV][CHECKPOINTS][i][Z] = DOF2_GetFloat(checkpointFile, key);
+        Circuits[circuitID][CD_ZCHECKPOINTS][i] = DOF2_GetFloat(checkpointFile, key);
     }
+}
 
-    printf("Y: %f", Circuits[LV][CHECKPOINTS][6][Y]);
+stock CIRCUIT_ID:GetCircuitIDByName(const name[])
+{
+    if(strcmp("lv", name, true) == 0) return CID_LAS_VEGAS;
+
+    return CID_INVALID;
 }

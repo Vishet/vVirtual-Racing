@@ -1,20 +1,8 @@
-hook OnPlayerRequestClass(playerid, classid)
-{
-    SetSpawnInfo(
-		playerid, 0, 0, 
-		1958.3783, 1343.1572, 15.3746, 269.1425, 
-		0, 0, 0, 0, 0, 0
-	);
-	SpawnPlayer(playerid);
-
-    return 1;
-}
-
 CMD:v(playerid, params[]) // /v [vehicleid]
 {
     new vehicleType;
     if(sscanf(params, "i", vehicleType))
-        SendClientMessage(playerid, RED, "Uso: /v [id do veiculo]");
+        SendClientMessage(playerid, COLOR_RED, "Uso: /v [id do veiculo]");
     else
     {
         new Float:x, Float:y, Float:z, Float:angle;
@@ -36,15 +24,24 @@ CMD:testcheckpoint(playerid, params[])
     format(msgX, sizeof(msgX), "[ADMIN] X: %f", x);
     format(msgY, sizeof(msgY), "[ADMIN] Y: %f", y);
     format(msgZ, sizeof(msgZ), "[ADMIN] Z: %f", z);
-    SendClientMessage(playerid, BLUE, msgX);
-    SendClientMessage(playerid, BLUE, msgY);
-    SendClientMessage(playerid, BLUE, msgZ);
+    SendClientMessage(playerid, COLOR_BLUE, msgX);
+    SendClientMessage(playerid, COLOR_BLUE, msgY);
+    SendClientMessage(playerid, COLOR_BLUE, msgZ);
 
     printf("X: %f", x);
     printf("Y: %f", y);
     printf("Z: %f\n", z);
 
-    SetPlayerCheckpoint(playerid, x, y, z, 20);
+    SetPlayerCheckpoint(playerid, x, y, z, CHECKPOINT_SIZE);
+
+    return 1;
+}
+
+CMD:getang(playerid, params[])
+{
+    new Float:angle;
+    GetPlayerFacingAngle(playerid, angle);
+    printf("Angle: %f", angle);
 
     return 1;
 }

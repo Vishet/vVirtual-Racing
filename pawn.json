@@ -9,7 +9,8 @@
 		"pawn-lang/YSI-Includes",
 		"Southclaws/zcmd",
 		"Y-Less/sscanf:v2.13.1",
-		"Zeex/samp-plugin-crashdetect:v4.20"
+		"Zeex/samp-plugin-crashdetect:v4.20",
+		"bmisiak/samp-precise-timers:v2.1.0"
 	],
 	"local": true,
 	"runtime": {
@@ -41,7 +42,7 @@
 		"messageholelimit": 3000,
 		"messageslimit": 500,
 		"ackslimit": 3000,
-		"playertimeout": 10000,
+		"playertimeout": 2000,
 		"minconnectiontime": 0,
 		"lagcompmode": 1,
 		"connseedtime": 300000,
