@@ -1,21 +1,23 @@
-hook OnPlayerEnterRaceCheckpoint(playerid)
-{
-    new index = checkpointChains[playerid][CC_CHECKPOINT_INDEX];
-    new count = checkpointChains[playerid][CC_CHECKPOINT_COUNT];
-    new nextIndex;
+#include <YSI_Coding\y_hooks>
 
-    if(index + 1 == count)
+hook OnPlayerEnterRaceCP(playerid)
+{
+    new index = checkpointChains[playerid][CC_INDEX] + 1;
+    new count = checkpointChains[playerid][CC_COUNT];
+    new nextIndex = index + 1;
+
+    if(nextIndex == count)
     {
         nextIndex = 0;
-        checkpointChains[playerid][CC_CHECKPOINT_INDEX] = 0;
     }
-    else
+    else if(index == count)
     {
-        nextIndex = index + 1;
-        ++checkpointChains[playerid][CC_CHECKPOINT_INDEX];
+        index = 0;
+        nextIndex = 1;
     }
 
-    printf("nextIndex: %d", nextIndex);
+    if(checkpointChains[playerid][CC_INDEX] == 0)
+        ++checkpointChains[playerid][CC_LAP];
 
     SetPlayerRaceCheckpoint(
         playerid, 0, 
@@ -27,4 +29,13 @@ hook OnPlayerEnterRaceCheckpoint(playerid)
         checkpointChains[playerid][CC_ZCHECKPOINTS][nextIndex], 
         CHECKPOINT_SIZE
     );  
+
+
+    checkpointChains[playerid][CC_INDEX] = index;
+
+    new msg[64];
+    format(msg, sizeof(msg), "index: %d, nextIndex: %d, z: %f", index, nextIndex, checkpointChains[playerid][CC_ZCHECKPOINTS][index]);
+    SendClientMessage(playerid, COLOR_BLUE, msg);
+
+    return 1;
 }

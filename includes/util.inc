@@ -14,9 +14,9 @@ stock stringcpy(dest[], destSize,  const source[])
 }
 
 
-stock CreatePutVehicle(playerId, vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay)
+stock CreatePutVehicle(playerid, vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay)
 {
     new vehicleId = CreateVehicle(vehicletype, x, y, z, rotation, color1, color2, respawn_delay);
-    PutPlayerInVehicle(playerId, vehicleId, 0);
+    PutPlayerInVehicle(playerid, vehicleId, 0);
     return vehicleId;
 }

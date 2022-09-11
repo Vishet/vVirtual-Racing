@@ -1,7 +1,4 @@
-timer delayedVehicle[1000](playerId, vehicletype, Float:x, Float:y, Float:z, Float:rotation, color1, color2, respawn_delay)
-{
-    CreatePutVehicle(playerId, vehicletype, x, y, z, rotation, color1, color2, respawn_delay);
-}
+#include <YSI_Coding\y_hooks>
 
 CMD:startqualy(playerid, params[])
 {
@@ -9,7 +6,12 @@ CMD:startqualy(playerid, params[])
     {
         SendClientMessage(playerid, COLOR_RED, "Você não é criador de nenhuma sessão");
         return 1;
-    }    
+    }
+    else if(sessions[playerid][SD_MODE] != SM_UNSTARTED)
+    {
+        SendClientMessage(playerid, COLOR_RED, "Você já começou uma classificação");
+        return 1;
+    }
 
     sessions[playerid][SD_MODE] = SM_QUALIFY;
 
@@ -26,16 +28,23 @@ CMD:startqualy(playerid, params[])
             cpCount
         );
 
-        new Float:x = Circuits[circuitID][CD_XCHECKPOINTS];
-        new Float:y = Circuits[circuitID][CD_YCHECKPOINTS];
-        new Float:z = Circuits[circuitID][CD_ZCHECKPOINTS];
+        new Float:x = Circuits[circuitID][CD_XCHECKPOINTS][0];
+        new Float:y = Circuits[circuitID][CD_YCHECKPOINTS][0];
+        new Float:z = Circuits[circuitID][CD_ZCHECKPOINTS][0];
         new Float:angle = Circuits[circuitID][CD_FIRST_ANGLE];
 
         SetPlayerPosFindZ(playerid, x, y, z);
         defer delayedVehicle(playerid, 451, x, y, z, angle, 0, 0, -1);
-        printf("X: %f", x);
-        printf("Y: %f", y);
-        printf("Z: %f", z);
+    }
+
+    return 1;
+}
+
+hook OnPlayerEnterRaceCP(playerid)
+{
+    if(checkpointChains[playerid][CC_LAP] > 1)
+    {
+        SendClientMessage(playerid, COLOR_BLUE, "Lap completed");
     }
 
     return 1;

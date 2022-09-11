@@ -1,7 +1,8 @@
 enum CIRCUIT_ID
 {
     CID_INVALID,
-    CID_LAS_VEGAS
+    CID_LAS_VEGAS,
+    CID_TEST
 }
 
 enum
@@ -54,6 +55,7 @@ stock LoadCircuit(CIRCUIT_ID:circuitID, const file[])
 stock CIRCUIT_ID:GetCircuitIDByName(const name[])
 {
     if(strcmp("lv", name, true) == 0) return CID_LAS_VEGAS;
+    else if(strcmp("test", name, true) == 0) return CID_TEST;
 
     return CID_INVALID;
 }

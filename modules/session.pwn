@@ -1,10 +1,18 @@
+#include <YSI_Coding\y_hooks>
+
 CMD:session(playerid, params[])
 {
+    if(sessions[playerid][SD_MODE] != SM_UNEXIST || players[playerid][PD_SESSION_ID] != -1)
+    {
+        SendClientMessage(playerid, COLOR_RED, "Você já é criador de uma sessão");
+        return 1;
+    }
+
     new circuitName[MAX_CIRCUIT_NAME_SIZE];
     new scanString[STRING_SIZE];
     format(scanString, sizeof(scanString), "s[%d]", MAX_CIRCUIT_NAME_SIZE);
     if(sscanf(params, scanString, circuitName))
-        SendClientMessage(playerid, COLOR_RED, "Uso: /v [nome do circuito]");
+        SendClientMessage(playerid, COLOR_RED, "Uso: /session [nome do circuito]");
     else
     {
         new CIRCUIT_ID:circuitID = GetCircuitIDByName(circuitName);
