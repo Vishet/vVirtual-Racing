@@ -17,8 +17,14 @@ hook OnPlayerEnterRaceCP(playerid)
     }
 
     if(checkpointChains[playerid][CC_INDEX] == 0)
+    {
         ++checkpointChains[playerid][CC_LAP];
-
+        new startTick = checkpointChains[playerid][CC_START_TICK];
+        new currentTick = GetTickCount();
+        checkpointChains[playerid][CC_LAST_LAPTIME] = GetTickCountDifference(currentTick, startTick);
+        checkpointChains[playerid][CC_START_TICK] = currentTick;
+    }
+        
     SetPlayerRaceCheckpoint(
         playerid, 0, 
         checkpointChains[playerid][CC_XCHECKPOINTS][index], 
@@ -32,10 +38,6 @@ hook OnPlayerEnterRaceCP(playerid)
 
 
     checkpointChains[playerid][CC_INDEX] = index;
-
-    new msg[64];
-    format(msg, sizeof(msg), "index: %d, nextIndex: %d, z: %f", index, nextIndex, checkpointChains[playerid][CC_ZCHECKPOINTS][index]);
-    SendClientMessage(playerid, COLOR_BLUE, msg);
 
     return 1;
 }

@@ -1,25 +1,33 @@
+enum PLAYER_MODE
+{
+    PM_FREE,
+    PM_SESSION,
+    PM_QUALIFY,
+    PM_RACE
+}
+
 enum PLAYER_DATA
 {
-    PD_SESSION_ID
+    PD_SESSION_ID,
+    PLAYER_MODE:PD_MODE
 }
 
 new players[MAX_PLAYERS][PLAYER_DATA];
 
-stock KickPlayerFromSession(playerid)
+stock GetPositionByPlayerId(playerid)
 {
-    new pSessionId = players[playerid][PD_SESSION_ID];
+    new sessionId = players[playerid][PD_SESSION_ID];
 
-    if(pSessionId < 0)
+    if(sessionId == -1)
         return -1;
 
-    for(new i = 0; i < sessions[pSessionId][SD_PLAYERSNUMBER]; i++)
+    for(new i = 0; i < sessions[sessionId][SD_PLAYERCOUNT]; ++i)
     {
-        if(sessions[pSessionId][SD_PLAYERS][i] == playerid)
+        if(sessions[sessionId][SD_PLAYERS][i] == playerid)
         {
-            sessions[pSessionId][SD_PLAYERS][i] = -1;
-            return i;
+            return i + 1;
         }
     }
 
-    return -1;
+    return 0;
 }

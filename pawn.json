@@ -10,7 +10,7 @@
 		"Southclaws/zcmd",
 		"Y-Less/sscanf:v2.13.1",
 		"Zeex/samp-plugin-crashdetect:v4.20",
-		"bmisiak/samp-precise-timers:v2.1.0"
+		"ScavengeSurvive/tick-difference:1.0.0"
 	],
 	"local": true,
 	"runtime": {

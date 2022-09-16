@@ -17,6 +17,7 @@ hook OnPlayerRequestClass(playerid, classid)
 hook OnPlayerConnect(playerid)
 {
 	players[playerid][PD_SESSION_ID] = -1;
+	players[playerid][PD_MODE] = PM_FREE;
 	return 1;
 }
 
@@ -24,5 +25,6 @@ hook OnPlayerDisconnect(playerid, reason)
 {
 	KickPlayerFromSession(playerid);
 	players[playerid][PD_SESSION_ID] = -1;
+	players[playerid][PD_MODE] = PM_FREE;
 	return 1;
 }
