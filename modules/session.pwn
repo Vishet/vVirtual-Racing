@@ -2,19 +2,28 @@
 
 stock KickPlayerFromSession(playerid)
 {
-    new pSessionId = players[playerid][PD_SESSION_ID];
+    new sessionId = players[playerid][PD_SESSION_ID];
 
-    if(pSessionId < 0)
+    if(sessionId < 0)
         return -1;
 
-    for(new i = 0; i < sessions[pSessionId][SD_PLAYERCOUNT]; i++)
+    new playerCount = sessions[sessionId][SD_PLAYERCOUNT];
+    for(new i = 0; i < playerCount; i++)
     {
-        if(sessions[pSessionId][SD_PLAYERS][i] == playerid)
+        if(sessions[sessionId][SD_PLAYERS][i] == playerid)
         {
-            sessions[pSessionId][SD_PLAYERS][i] = -1;
+            sessions[sessionId][SD_PLAYERS][i] = -1;
             return i;
         }
     }
+
+    players[playerid][PD_SESSION_ID] = -1;
+    players[playerid][PD_MODE] = PM_FREE;
+
+    new vehicleId = players[playerid][PD_VEHICLE_ID];
+    DestroyVehicle(vehicleId);
+
+    SetPlayerVirtualWorld(playerid, -1);
 
     return -1;
 }
@@ -22,17 +31,23 @@ stock KickPlayerFromSession(playerid)
 stock CreateSession(creatorId, const circuitName[])
 {
     new CIRCUIT_ID:circuitId = GetCircuitIDByName(circuitName);
-    sessions[creatorId][SD_CIRCUIT_ID] = circuitId;
-    sessions[creatorId][SD_PLAYERCOUNT] = 1;
-    sessions[creatorId][SD_PLAYERS][0] = creatorId;
-    sessions[creatorId][SD_MODE] = SM_UNSTARTED;
-    players[creatorId][PD_SESSION_ID] = creatorId;
+    new sessionId = creatorId;
+
+    sessions[sessionId][SD_CIRCUIT_ID] = circuitId;
+    sessions[sessionId][SD_PLAYERCOUNT] = 1;
+    sessions[sessionId][SD_PLAYERS][0] = creatorId;
+    sessions[sessionId][SD_MODE] = SM_UNSTARTED;
+
+    players[creatorId][PD_SESSION_ID] = sessionId;
     players[creatorId][PD_MODE] = PM_SESSION;
+
+    SetPlayerVirtualWorld(creatorId, sessionId);
 }
 
 stock AddPlayerToSession(playerid, sessionId)
 {
     players[playerid][PD_SESSION_ID] = sessionId;
+    SetPlayerVirtualWorld(playerid, sessionId);
 
     new playerCount = sessions[sessionId][SD_PLAYERCOUNT];
     sessions[sessionId][SD_PLAYERS][playerCount] = playerid;

@@ -18,13 +18,16 @@ hook OnPlayerConnect(playerid)
 {
 	players[playerid][PD_SESSION_ID] = -1;
 	players[playerid][PD_MODE] = PM_FREE;
+	players[playerid][PD_VEHICLE_ID] = -1;
+
+	SetPlayerVirtualWorld(playerid, -1);
+
 	return 1;
 }
 
 hook OnPlayerDisconnect(playerid, reason)
 {
 	KickPlayerFromSession(playerid);
-	players[playerid][PD_SESSION_ID] = -1;
-	players[playerid][PD_MODE] = PM_FREE;
+
 	return 1;
 }

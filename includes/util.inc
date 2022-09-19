@@ -152,6 +152,9 @@ stock EndSession(sessionId)
         new driverId = sessions[sessionId][SD_PLAYERS][i];
         players[driverId][PD_SESSION_ID] = -1;
         players[driverId][PD_MODE] = PM_FREE;
+        new vehicleId = players[driverId][PD_VEHICLE_ID];
+        DestroyVehicle(vehicleId);
+        SetPlayerVirtualWorld(driverId, -1);
         EndCheckpointChain(driverId);
     }
 
