@@ -84,6 +84,7 @@ hook OnPlayerEnterRaceCP(playerid)
         SendClientMessage(playerid, COLOR_GREEN, lapMsg);
 
         UpdatePlayerPosition(playerid);
+        EndPlayerQualy(playerid);
 
         new sessionId = players[playerid][PD_SESSION_ID];
         if(IsAllDriversLapped(sessionId))

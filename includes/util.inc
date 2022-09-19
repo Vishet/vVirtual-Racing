@@ -163,3 +163,10 @@ stock EndSession(sessionId)
 
     return 1;
 }
+
+stock EndPlayerQualy(playerid)
+{
+    DisableCheckpointChain(playerid);
+    new vehicleId = players[playerid][PD_VEHICLE_ID];
+    DestroyVehicle(vehicleId);
+}

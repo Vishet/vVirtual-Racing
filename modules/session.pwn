@@ -8,6 +8,8 @@ stock KickPlayerFromSession(playerid)
         return -1;
 
     new playerCount = sessions[sessionId][SD_PLAYERCOUNT];
+    SetPlayerPosition(playerid, playerCount - 1);
+    /*
     for(new i = 0; i < playerCount; i++)
     {
         if(sessions[sessionId][SD_PLAYERS][i] == playerid)
@@ -16,6 +18,7 @@ stock KickPlayerFromSession(playerid)
             return i;
         }
     }
+    */
 
     players[playerid][PD_SESSION_ID] = -1;
     players[playerid][PD_MODE] = PM_FREE;
@@ -24,6 +27,8 @@ stock KickPlayerFromSession(playerid)
     DestroyVehicle(vehicleId);
 
     SetPlayerVirtualWorld(playerid, -1);
+    EndCheckpointChain(playerid);
+    sessions[sessionId][SD_PLAYERCOUNT]--;
 
     return -1;
 }
@@ -109,6 +114,23 @@ CMD:endsession(playerid, params[])
         SendClientMessage(playerid, COLOR_RED, "Você não é criador de nenhuma sessão");
     else
         SendClientMessage(playerid, COLOR_BLUE, "Você terminou a sessão");
+
+    return 1;
+}
+
+CMD:quitsession(playerid, params[])
+{
+    new sessionId = players[playerid][PD_SESSION_ID];
+
+    if(sessionId == -1)
+        SendClientMessage(playerid, COLOR_RED, "Você não está em nenhuma sessão");
+    else if(sessions[playerid][SD_MODE] != SM_UNEXIST)
+        SendClientMessage(playerid, COLOR_RED, "Você é o criador da sessão. Termine-a usando o /endsession");
+    else
+    {
+        KickPlayerFromSession(playerid);
+        SendClientMessage(playerid, COLOR_BLUE, "Você saiu da sessão");
+    }
 
     return 1;
 }

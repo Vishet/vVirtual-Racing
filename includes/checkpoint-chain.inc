@@ -74,3 +74,28 @@ stock EndCheckpointChain(playerid)
     checkpointChains[playerid][CC_LAST_LAPTIME] = 0;
     DisablePlayerRaceCheckpoint(playerid);
 }
+
+stock DisableCheckpointChain(playerid)
+{
+    DisablePlayerRaceCheckpoint(playerid);
+}
+
+stock EnableCheckpointChain(playerid)
+{
+    new cpCount = checkpointChains[playerid][CC_COUNT];
+    if(cpCount == 0)
+        return -1;
+
+    SetPlayerRaceCheckpoint(
+        playerid, 0, 
+        checkpointChains[playerid][CC_XCHECKPOINTS][index], 
+        checkpointChains[playerid][CC_YCHECKPOINTS][index], 
+        checkpointChains[playerid][CC_ZCHECKPOINTS][index], 
+        checkpointChains[playerid][CC_XCHECKPOINTS][nextIndex], 
+        checkpointChains[playerid][CC_YCHECKPOINTS][nextIndex], 
+        checkpointChains[playerid][CC_ZCHECKPOINTS][nextIndex], 
+        CHECKPOINT_SIZE
+    );
+
+    return 1;
+}
