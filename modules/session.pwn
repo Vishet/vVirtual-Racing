@@ -89,25 +89,11 @@ CMD:joinsession(playerid, params[])
 CMD:endsession(playerid, params[])
 {
     new sessionId = playerid;
-    if(sessions[sessionId][SD_MODE] == SM_UNEXIST)
-    {
+
+    if(EndSession(sessionId) == -1)
         SendClientMessage(playerid, COLOR_RED, "Você não é criador de nenhuma sessão");
-        return 1;
-    }
-        
-    new playerCount = sessions[sessionId][SD_PLAYERCOUNT];
-    for(new i = 0; i < playerCount; i++)
-    {
-        new driverId = sessions[sessionId][SD_PLAYERS][i];
-        players[driverId][PD_SESSION_ID] = -1;
-        players[driverId][PD_MODE] = PM_FREE;
-        EndCheckpointChain(playerid);
-    }
-
-    sessions[sessionId][SD_CIRCUIT_ID] = CID_INVALID;
-    sessions[sessionId][SD_MODE] = SM_UNEXIST;
-
-    SendClientMessage(playerid, COLOR_BLUE, "Você terminou a sessão");
+    else
+        SendClientMessage(playerid, COLOR_BLUE, "Você terminou a sessão");
 
     return 1;
 }

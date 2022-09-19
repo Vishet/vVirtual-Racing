@@ -7,6 +7,7 @@
 #include <YSI_Coding/y_timers>
 #include <tick-difference>
 
+#include "includes/timestamp.inc"
 #include "includes/config.inc"
 #include "includes/colors.inc"
 #include "includes/circuits.inc"

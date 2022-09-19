@@ -33,7 +33,7 @@ stock LoadCircuit(CIRCUIT_ID:circuitID, const file[])
     new infoFile[STRING_SIZE];
     format(infoFile, sizeof(infoFile), "%s/info.ini", file);
 
-    stringcpy(Circuits[circuitID][CD_NAME], MAX_CIRCUIT_NAME_SIZE, DOF2_GetString(infoFile, "name"));
+    strcopy(Circuits[circuitID][CD_NAME], DOF2_GetString(infoFile, "name"));
     Circuits[circuitID][CD_CHECKPOINTS_COUNT] = DOF2_GetInt(checkpointFile, "count");
     Circuits[circuitID][CD_FIRST_ANGLE] = Float:DOF2_GetFloat(infoFile, "first_angle");
 

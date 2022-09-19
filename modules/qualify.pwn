@@ -2,18 +2,20 @@
 
 CMD:startqualy(playerid, params[])
 {
-    if(sessions[playerid][SD_MODE] == SM_UNEXIST)
+    new sessionId = playerid;
+
+    if(sessions[sessionId][SD_MODE] == SM_UNEXIST)
     {
         SendClientMessage(playerid, COLOR_RED, "Você não é criador de nenhuma sessão");
         return 1;
     }
-    else if(sessions[playerid][SD_MODE] != SM_UNSTARTED)
+    else if(sessions[sessionId][SD_MODE] != SM_UNSTARTED)
     {
         SendClientMessage(playerid, COLOR_RED, "Você já começou uma classificação");
         return 1;
     }
 
-    sessions[playerid][SD_MODE] = SM_QUALIFY;
+    sessions[sessionId][SD_MODE] = SM_QUALIFY;
     SendClientMessage(playerid, COLOR_BLUE, "A Classificação começou");
 
     return 1;
@@ -71,45 +73,26 @@ hook OnPlayerEnterRaceCP(playerid)
     {
         SendClientMessage(playerid, COLOR_GREEN, "Volta iniciada");
     }
-    if(ccLap > 1 && ccIndex == 1)
+    else if(ccLap >= 2 && ccIndex == 1)
     {
-        new lapMsg[64];
         new lapTime = checkpointChains[playerid][CC_LAST_LAPTIME];
+        new lapTimestamp[64];
+        GetTimestampString(lapTime, lapTimestamp, sizeof(lapTimestamp));
 
-        new minutes = 0;
-        new seconds = 0;
-        new milliseconds = 0;
-        millisecondsToTimestamp(lapTime, minutes, seconds, milliseconds);
-
-        if(minutes == 0)
-            format(lapMsg, sizeof(lapMsg), "Volta terminada: %d.%d", seconds, milliseconds);
-        else
-            format(lapMsg, sizeof(lapMsg), "Volta terminada: %d:%d.%d", minutes, seconds, milliseconds);
+        new lapMsg[128];
+        format(lapMsg, sizeof(lapMsg), "Volta terminada: %s", lapTimestamp);
         SendClientMessage(playerid, COLOR_GREEN, lapMsg);
 
+        UpdatePlayerPosition(playerid);
+
         new sessionId = players[playerid][PD_SESSION_ID];
-        new playerCount = sessions[sessionId][SD_PLAYERCOUNT];
-        for(new i = 0; i < playerCount; i++)
+        if(IsAllDriversLapped(sessionId))
         {
-            new driverId = sessions[sessionId][SD_PLAYERS][i];
-            new playerPosition = GetPositionByPlayerId(driverId);
-
-            new playerName[MAX_PLAYER_NAME];
-            GetPlayerName(driverId, playerName);
-
-            new currentLap = checkpointChains[driverId][CC_LAP];
-            if(currentLap > 1)
-            {
-                new driverLapTime = checkpointChains[driverId][CC_LAST_LAPTIME];
-
-                new driverLapTimestamp[64];
-                GetTimestampString(driverLapTime, driverLapTimestamp, sizeof(driverLapTimestamp));
-                new msg[128];
-                format(msg, sizeof(msg), "[%d] %s: %s", playerPosition, playerName, driverLapTimestamp);
-                SendClientMessageToAll(COLOR_GREEN, msg);
-            }       
-        }      
+            ShowSessionPositions(sessionId);
+            EndSession(sessionId);
+        }
     }
 
     return 1;
 }
+
